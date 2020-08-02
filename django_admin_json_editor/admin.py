@@ -28,7 +28,8 @@ class JSONEditorWidget(forms.Widget):
         self._editor_options.update(editor_options or {})
 
     def render(self, name, value, attrs=None, renderer=None):
-        obj = self._obj.copy()
+        if self._obj is not None:
+            obj = self._obj.copy()
         if callable(self._schema):
             schema = self._schema(self, obj)
         else:
