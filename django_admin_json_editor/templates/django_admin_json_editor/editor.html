@@ -3,20 +3,20 @@
 <script>
     var container = document.getElementById("{{ name }}_editor");
     var options = {{ editor_options|safe }};
-    var {{ name }}_editor = new JSONEditor(container, options);
-    {{ name }}_editor.on('change', function () {
-        var errors = {{ name }}_editor.validate();
+    var {{ underscore_name }}_editor = new JSONEditor(container, options);
+    {{ underscore_name }}_editor.on('change', function () {
+        var errors = {{ underscore_name }}_editor.validate();
         if (errors.length) {
             console.log(errors);
         }
         else {
-            var json = {{ name }}_editor.getValue();
+            var json = {{ underscore_name }}_editor.getValue();
             document.getElementById("id_{{ name }}").value = JSON.stringify(json);
         }
     });
     {% if data %}
         var json = {{ data|safe }};
-        {{ name }}_editor.setValue(json);
+        {{ underscore_name }}_editor.setValue(json);
     {% endif %}
 </script>
 

@@ -43,6 +43,7 @@ class JSONEditorWidget(forms.Widget):
 
         context = {
             "name": name,
+            "underscore_name": name.replace("-", "_"),
             "data": value,
             "editor_options": json.dumps(editor_options),
         }
