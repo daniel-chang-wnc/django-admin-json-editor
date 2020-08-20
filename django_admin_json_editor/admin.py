@@ -29,7 +29,9 @@ class JSONEditorWidget(forms.Widget):
 
     def render(self, name, value, attrs=None, renderer=None):
         if self._obj is not None:
-            obj = self._obj.copy()
+            obj = self._obj
+        else:
+            obj = self._obj
         if callable(self._schema):
             schema = self._schema(self, obj)
         else:
@@ -40,11 +42,15 @@ class JSONEditorWidget(forms.Widget):
 
         editor_options = self._editor_options.copy()
         editor_options["schema"] = schema
-
+        field_name = name.split('-')[-1]
+        reference_name = 'testcase'
+        # print(name.replace(field_name, reference_name))
         context = {
             "name": name,
             "underscore_name": name.replace("-", "_"),
             "data": value,
+            "field_name": field_name,
+            "selector_name":'id_'+name.replace(field_name, reference_name),
             "editor_options": json.dumps(editor_options),
         }
         return mark_safe(render_to_string(self.template_name, context))

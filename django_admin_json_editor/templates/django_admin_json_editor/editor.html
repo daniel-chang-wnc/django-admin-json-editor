@@ -1,23 +1,72 @@
 <div id="{{ name }}_editor"></div>
-
 <script>
-    var container = document.getElementById("{{ name }}_editor");
-    var options = {{ editor_options|safe }};
-    var {{ underscore_name }}_editor = new JSONEditor(container, options);
-    {{ underscore_name }}_editor.on('change', function () {
-        var errors = {{ underscore_name }}_editor.validate();
-        if (errors.length) {
-            console.log(errors);
-        }
-        else {
-            var json = {{ underscore_name }}_editor.getValue();
-            document.getElementById("id_{{ name }}").value = JSON.stringify(json);
-        }
+    var {{ underscore_name }}_editor
+    var {{ underscore_name }}_myschema
+    var selector_value = jQuery('#{{selector_name}}').val()
+    jQuery(document).ready(function () {
+        jQuery('#{{selector_name}}').change({{ underscore_name }}_test)
     });
-    {% if data %}
-        var json = {{ data|safe }};
-        {{ underscore_name }}_editor.setValue(json);
-    {% endif %}
+    if (selector_value !== ""){
+        jQuery.ajax({
+            "type": "GET",
+            "url": "/limit/?testcase=" + selector_value,
+            // "dataType" : "json",
+            "cache": false,
+            "success": function (msg) {
+                {{ underscore_name }}_myschema = JSON.parse(msg)["{{field_name}}"]
+            }
+        }).then(
+            function(){
+            var container = document.getElementById("{{ name }}_editor");
+            var options = {{ editor_options|safe }};
+            options['schema'] =  {{ underscore_name }}_myschema
+            {{ underscore_name }}_editor = new JSONEditor(container, options);
+            {{ underscore_name }}_editor.on('change', function () {
+                var errors = {{ underscore_name }}_editor.validate();
+                if (errors.length) {
+                    console.log(errors);
+                }
+                else {
+                    var json = {{ underscore_name }}_editor.getValue();
+                    document.getElementById("id_{{ name }}").value = JSON.stringify(json);
+                }
+            });
+                {% if data %}
+                var json = {{ data|safe }};
+                {{ underscore_name }}_editor.setValue(json);
+                {% endif %}
+            }
+
+        )
+    } else {
+        var container = document.getElementById("{{ name }}_editor");
+        var options = {{ editor_options|safe }};
+        {{ underscore_name }}_editor = new JSONEditor(container, options);
+    }
+
+        function {{ underscore_name }}_test() {
+            var selector_value = jQuery('#{{selector_name}}').val()
+            {{ underscore_name }}_type_change(selector_value)
+        }
+        // based on the type, action will be loaded
+
+        function {{ underscore_name }}_type_change(selector_value) {
+            jQuery.ajax({
+                "type": "GET",
+                "url": "/limit/?testcase=" + selector_value,
+                // "dataType" : "json",
+                "cache": false,
+                "success": function (msg) {
+                    {{ underscore_name }}_editor.destroy()
+                    var container = document.getElementById("{{ name }}_editor");
+                    var options = {{ editor_options|safe }};
+                    options['schema'] = JSON.parse(msg)["{{field_name}}"]
+                    {{ underscore_name }}_editor = new JSONEditor(container, options);
+
+                }
+
+            });
+        }
 </script>
 
 <textarea cols="40" id="id_{{ name }}" name="{{ name }}" rows="10" required=""
