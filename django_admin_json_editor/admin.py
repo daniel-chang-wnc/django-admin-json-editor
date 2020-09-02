@@ -15,7 +15,6 @@ class JSONEditorWidget(forms.Widget):
         sceditor=False,
         editor_options=None,
         obj=None,
-        inline=False,
     ):
         super(JSONEditorWidget, self).__init__()
         self._schema = schema
@@ -27,7 +26,6 @@ class JSONEditorWidget(forms.Widget):
             "iconlib": "fontawesome4",
         }
         self._editor_options.update(editor_options or {})
-        self.inline = inline
 
     def render(self, name, value, attrs=None, renderer=None):
         if self._obj is not None:
@@ -44,17 +42,16 @@ class JSONEditorWidget(forms.Widget):
 
         editor_options = self._editor_options.copy()
         editor_options["schema"] = schema
-        field_name = name.split("-")[-1]
-        reference_name = "testcase"
+        field_name = name.split('-')[-1]
+        reference_name = 'testcase'
         # print(name.replace(field_name, reference_name))
         context = {
             "name": name,
             "underscore_name": name.replace("-", "_"),
             "data": value,
             "field_name": field_name,
-            "selector_name": "id_" + name.replace(field_name, reference_name),
+            "selector_name":'id_'+name.replace(field_name, reference_name),
             "editor_options": json.dumps(editor_options),
-            "inline": self.inline,
         }
         return mark_safe(render_to_string(self.template_name, context))
 
@@ -74,7 +71,9 @@ class JSONEditorWidget(forms.Widget):
             css["all"].append(
                 "django_admin_json_editor/bootstrap/css/bootstrap.min.css"
             )
-            js.append("django_admin_json_editor/jquery/jquery-3.5.1.min.js")
+            js.append(
+                "django_admin_json_editor/jquery/jquery-3.5.1.min.js"
+            )
             js.append(
                 "django_admin_json_editor/bootstrap/js/bootstrap.bundle.min.js"
             )
