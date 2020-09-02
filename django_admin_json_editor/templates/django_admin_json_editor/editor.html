@@ -2,7 +2,6 @@
 <input type='button' id='{{ name }}_toggle' value='hide/show'>
 <script>
     jQuery(document).ready(function(){
-        jQuery('#{{ name }}_editor').hide()
         jQuery('#{{ name }}_toggle').on('click', function(event) {
             jQuery('#{{ name }}_editor').toggle();
         });
