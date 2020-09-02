@@ -1,4 +1,18 @@
+
+<input type='button' id='{{ name }}_toggle' value='hide/show'>
+<script>
+    jQuery(document).ready(function(){
+        jQuery('#{{ name }}_editor').hide()
+        jQuery('#{{ name }}_toggle').on('click', function(event) {
+            jQuery('#{{ name }}_editor').toggle();
+        });
+    });
+</script>
+
+
 <div id="{{ name }}_editor"></div>
+
+{% if inline == True %}
 <script>
     var {{ underscore_name }}_editor
     var {{ underscore_name }}_myschema
@@ -68,6 +82,8 @@
             });
         }
 </script>
+
+{% endif %}
 
 <textarea cols="40" id="id_{{ name }}" name="{{ name }}" rows="10" required=""
           style="display: none">{{ data|safe }}</textarea>
