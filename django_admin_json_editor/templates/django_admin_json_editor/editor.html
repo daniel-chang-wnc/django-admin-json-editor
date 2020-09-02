@@ -1,11 +1,4 @@
 
-
-
-
-<div id="{{ name }}_editor"></div>
-
-{% if inline == True %}
-
 <input type='button' id='{{ name }}_toggle' value='hide/show'>
 <script>
     jQuery(document).ready(function(){
@@ -16,6 +9,10 @@
     });
 </script>
 
+
+<div id="{{ name }}_editor"></div>
+
+{% if inline == True %}
 <script>
     var {{ underscore_name }}_editor
     var {{ underscore_name }}_myschema
